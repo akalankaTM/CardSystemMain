@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
         header.setBackground(new Color(13, 27, 62));
         header.setPreferredSize(new Dimension(900, 55));
 
-        JLabel title = new JLabel("  💳 Credit Card Management System");
+        JLabel title = new JLabel("Credit Card Management System");
         title.setFont(new Font("Arial", Font.BOLD, 18));
         title.setForeground(Color.WHITE);
 
@@ -42,9 +42,12 @@ public class MainFrame extends JFrame {
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(new Font("Arial", Font.BOLD, 13));
         tabs.setBackground(new Color(240, 245, 255));
-        tabs.addTab("  Dashboard",   new DashboardPanel());
-        tabs.addTab("  Transaction", new TransactionPanel());
-        tabs.addTab("  Report",      new ReportPanel());
+        tabs.addTab("  Dashboard",    new DashboardPanel());
+        tabs.addTab("  Customers",    new CustomerPanel());
+        tabs.addTab("  Cards",        new CardManagementPanel());
+        tabs.addTab("  Transaction",  new TransactionPanel());
+        tabs.addTab("  History",      new TransactionHistoryPanel());
+        tabs.addTab("  Report",       new ReportPanel());
 
         add(header, BorderLayout.NORTH);
         add(tabs,   BorderLayout.CENTER);

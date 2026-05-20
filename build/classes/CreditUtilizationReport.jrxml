@@ -1,0 +1,107 @@
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="CreditUtilizationReport"
+              pageWidth="595" pageHeight="842"
+              columnWidth="535" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20">
+
+    <queryString>
+        <![CDATA[
+        SELECT cu.name, cc.card_number, cc.credit_limit, cc.current_balance,
+        ROUND((cc.current_balance / cc.credit_limit) * 100, 2) AS utilization,
+        CASE
+            WHEN (cc.current_balance / cc.credit_limit) >= 0.90 THEN 'CRITICAL'
+            WHEN (cc.current_balance / cc.credit_limit) >= 0.75 THEN 'HIGH'
+            WHEN (cc.current_balance / cc.credit_limit) >= 0.50 THEN 'MODERATE'
+            ELSE 'LOW'
+        END AS risk
+        FROM credit_cards cc
+        JOIN customers cu ON cc.customer_id = cu.customer_id
+        ]]>
+    </queryString>
+
+    <field name="name"            class="java.lang.String"/>
+    <field name="card_number"     class="java.lang.String"/>
+    <field name="credit_limit"    class="java.math.BigDecimal"/>
+    <field name="current_balance" class="java.math.BigDecimal"/>
+    <field name="utilization"     class="java.math.BigDecimal"/>
+    <field name="risk"            class="java.lang.String"/>
+
+    <title>
+        <band height="40">
+            <staticText>
+                <reportElement x="0" y="0" width="535" height="40"/>
+                <textElement textAlignment="Center">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Credit Utilization Report]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <columnHeader>
+    <band height="25">
+        <staticText>
+            <reportElement x="0" y="0" width="100" height="25" backcolor="#0D1B3E" forecolor="#FFFFFF" mode="Opaque"/>
+            <textElement><font isBold="true"/></textElement>
+            <text><![CDATA[Customer]]></text>
+        </staticText>
+        <staticText>
+            <reportElement x="100" y="0" width="120" height="25" backcolor="#0D1B3E" forecolor="#FFFFFF" mode="Opaque"/>
+            <textElement><font isBold="true"/></textElement>
+            <text><![CDATA[Card Number]]></text>
+        </staticText>
+        <staticText>
+            <reportElement x="220" y="0" width="90" height="25" backcolor="#0D1B3E" forecolor="#FFFFFF" mode="Opaque"/>
+            <textElement><font isBold="true"/></textElement>
+            <text><![CDATA[Limit]]></text>
+        </staticText>
+        <staticText>
+            <reportElement x="310" y="0" width="90" height="25" backcolor="#0D1B3E" forecolor="#FFFFFF" mode="Opaque"/>
+            <textElement><font isBold="true"/></textElement>
+            <text><![CDATA[Balance]]></text>
+        </staticText>
+        <staticText>
+            <reportElement x="400" y="0" width="55" height="25" backcolor="#0D1B3E" forecolor="#FFFFFF" mode="Opaque"/>
+            <textElement><font isBold="true"/></textElement>
+            <text><![CDATA[Util%]]></text>
+        </staticText>
+        <staticText>
+            <reportElement x="455" y="0" width="80" height="25" backcolor="#0D1B3E" forecolor="#FFFFFF" mode="Opaque"/>
+            <textElement><font isBold="true"/></textElement>
+            <text><![CDATA[Risk]]></text>
+        </staticText>
+    </band>
+</columnHeader>
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="100" height="20"/>
+                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="0" width="120" height="20"/>
+                <textFieldExpression><![CDATA[$F{card_number}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="220" y="0" width="90" height="20"/>
+                <textFieldExpression><![CDATA[$F{credit_limit}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="310" y="0" width="90" height="20"/>
+                <textFieldExpression><![CDATA[$F{current_balance}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="400" y="0" width="55" height="20"/>
+                <textFieldExpression><![CDATA[$F{utilization}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="455" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{risk}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+</jasperReport>

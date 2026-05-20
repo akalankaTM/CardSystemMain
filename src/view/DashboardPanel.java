@@ -37,7 +37,7 @@ public class DashboardPanel extends JPanel {
         title.setBorder(BorderFactory.createEmptyBorder(12, 10, 12, 0));
 
         // table
-        String[] cols = {"Card ID", "Customer", "Card Number", "Limit (LKR)", "Balance (LKR)", "Status"};
+        String[] cols = {"Card ID", "Customer", "Card Number", "Limit (LKR)", "Available Credit (LKR)", "Status"};
         tableModel = new DefaultTableModel(cols, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -69,7 +69,7 @@ public class DashboardPanel extends JPanel {
             }
         });
 
-        JButton refreshBtn = new JButton("🔄 Refresh");
+        JButton refreshBtn = new JButton("Refresh");
         refreshBtn.setBackground(new Color(13, 27, 62));
         refreshBtn.setForeground(Color.WHITE);
         refreshBtn.setFont(new Font("Arial", Font.BOLD, 13));
@@ -102,14 +102,15 @@ public class DashboardPanel extends JPanel {
                     break;
                 }
             }
-            tableModel.addRow(new Object[]{
-                card.getCardId(),
-                customerName,
-                card.getCardNumber(),
-                String.format("%.2f", card.getCreditLimit()),
-                String.format("%.2f", card.getCurrentBalance()),
-                card.getStatus()
-            });
+            double availableCredit = card.getCreditLimit() - card.getCurrentBalance();
+         tableModel.addRow(new Object[]{
+    card.getCardId(),
+    customerName,
+    card.getCardNumber(),
+    String.format("%.2f", card.getCreditLimit()),
+    String.format("%.2f", availableCredit),
+    card.getStatus()
+});
         }
     }
 }

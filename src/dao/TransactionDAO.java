@@ -19,22 +19,22 @@ import java.util.List;
 public class TransactionDAO {
 
     public void addTransaction(int cardId, double amount,
-                                String type, String description) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO transactions (card_id, amount, type, description) " +
-                "VALUES (?, ?, ?, ?)");
-            ps.setInt(1, cardId);
-            ps.setDouble(2, amount);
-            ps.setString(3, type);
-            ps.setString(4, description);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+                            String type, String description, String accountNumber) {
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+            "INSERT INTO transactions (card_id, amount, type, description, account_number) " +
+            "VALUES (?, ?, ?, ?, ?)");
+        ps.setInt(1, cardId);
+        ps.setDouble(2, amount);
+        ps.setString(3, type);
+        ps.setString(4, description);
+        ps.setString(5, accountNumber);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
     }
-
+}
     public List<Transaction> getAllTransactions() {
         List<Transaction> list = new ArrayList<>();
         try {
@@ -55,4 +55,27 @@ public class TransactionDAO {
         }
         return list;
     }
+    
+    public List<Transaction> getTransactionsByCard(int cardId) {
+    List<Transaction> list = new ArrayList<>();
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+            "SELECT * FROM transactions WHERE card_id = ? ORDER BY transaction_id DESC");
+        ps.setInt(1, cardId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Transaction(
+                rs.getInt("transaction_id"),
+                rs.getInt("card_id"),
+                rs.getDouble("amount"),
+                rs.getString("type"),
+                rs.getString("description")
+            ));
+        }
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+    return list;
+}
 }

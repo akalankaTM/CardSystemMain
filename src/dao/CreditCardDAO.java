@@ -75,4 +75,32 @@ public class CreditCardDAO {
             System.out.println("Error: " + e.getMessage());
         }
     }
+    
+    public void updateStatus(int cardId, String status) {
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+            "UPDATE credit_cards SET status = ? WHERE card_id = ?");
+        ps.setString(1, status);
+        ps.setInt(2, cardId);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+    }
+    
+    public void unblockCard(int cardId) {
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+            "UPDATE credit_cards SET status = 'ACTIVE' WHERE card_id = ? AND current_balance < credit_limit");
+        ps.setInt(1, cardId);
+        int rows = ps.executeUpdate();
+        if (rows == 0) {
+            System.out.println("Cannot unblock - balance still at limit.");
+        }
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+}
 }

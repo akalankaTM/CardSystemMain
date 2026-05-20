@@ -35,4 +35,45 @@ public class CustomerDAO {
         }
         return list;
     }
+    public void addCustomer(String name, String email, String phone) {
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+            "INSERT INTO customers (name, email, phone) VALUES (?, ?, ?)");
+        ps.setString(1, name);
+        ps.setString(2, email);
+        ps.setString(3, phone);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+    }
 }
+
+public void updateCustomer(int id, String name, String email, String phone) {
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+            "UPDATE customers SET name=?, email=?, phone=? WHERE customer_id=?");
+        ps.setString(1, name);
+        ps.setString(2, email);
+        ps.setString(3, phone);
+        ps.setInt(4, id);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+}
+
+public void deleteCustomer(int id) {
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+            "DELETE FROM customers WHERE customer_id=?");
+        ps.setInt(1, id);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+}
+}
+
